@@ -1,0 +1,20 @@
+# Build Artifacts
+bin/
+*.exe
+*.o
+*.obj
+*.out
+
+# Local Databases
+*.dat
+*.txt
+
+# IDE and OS metadata
+.vscode/
+.idea/
+Thumbs.db
+ehthumbs.db
+.DS_Store
+
+# Office temporary lock files
+~$*

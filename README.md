@@ -27,7 +27,7 @@ Developing reliable financial software requires an uncompromising commitment to 
 
 ## Software Architecture Flowchart
 
-mermaid
+```mermaid
 flowchart TD
     MAIN(["Console Application Entry main()"]) --> MENU["Render Main Banking Menu"]
     
@@ -50,29 +50,29 @@ flowchart TD
     
     MENU --> O6["Option 6: Close Account / Delete"]
     O6 --> O6_FILT["Filter Out Record ID"] --> O6_WR["Rewrite Clean Storage Buffer"]
-
+```
 
 ## Algorithmic & Mathematical Modeling
 
 ### 1. Transactional Balance State Mutation & Invariant
 At discrete time $t$, the balance $B(t)$ evaluates mutations based on deposit credit ($D$) or withdrawal debit ($W$).
-$$B(t + 1) = B(t) + \Delta B, \quad \text{"where "} \Delta B = \begin{"cases"} +D & \text{"(Deposit, "} D > 0\text{")"} \\ -W & \text{"(Withdrawal, "} W > 0\text{")"} \end{"cases"}$$
-$$\text{"System Invariant: "} B(t + 1) \ge B_{"min"} \quad (\text{"Strict Overdraft Prohibition"})$$
+$$B(t + 1) = B(t) + \Delta B, \quad \text{where } \Delta B = \begin{cases} +D & \text{(Deposit, } D > 0\text{)} \\ -W & \text{(Withdrawal, } W > 0\text{)} \end{cases}$$
+$$\text{System Invariant: } B(t + 1) \ge B_{min} \quad (\text{Strict Overdraft Prohibition})$$
 
 ### 2. Currency Fixed-Point Scaling
 To prevent catastrophic IEEE-754 precision drift, all currency should mathematically scale by $10^2$ (representing the value strictly in cents/minor units):
-$$B_{"scaled"} = \text{"round"}(B \times 10^2) \in \mathbb{"Z"}$$
+$$B_{scaled} = \text{round}(B \times 10^2) \in \mathbb{Z}$$
 
 ### 3. Complexity Analysis Matrix
 Operating upon raw file streams dictates the algorithmic cost:
-- **Account Creation (Append)**: $\mathcal{"O"}(1)$ time, $\mathcal{"O"}(1)$ auxiliary space.
-- **Linear Account Search by ID**: $\mathcal{"O"}(N)$ time.
-- **In-Place File Record Update**: $\mathcal{"O"}(N)$ time (if searching sequentially), bounded $\mathcal{"O"}(1)$ auxiliary memory.
-- **Complete Ledger Scan & Display**: $\mathcal{"O"}(N)$ time.
+- **Account Creation (Append)**: $\mathcal{O}(1)$ time, $\mathcal{O}(1)$ auxiliary space.
+- **Linear Account Search by ID**: $\mathcal{O}(N)$ time.
+- **In-Place File Record Update**: $\mathcal{O}(N)$ time (if searching sequentially), bounded $\mathcal{O}(1)$ auxiliary memory.
+- **Complete Ledger Scan & Display**: $\mathcal{O}(N)$ time.
 
 ### 4. Binary Record File Offset Addressing
-If the objects are written statically using binary blocks, direct $\mathcal{"O"}(1)$ access can be derived via offset multiplication:
-$$\text{"Seek Offset"}(k) = (k - 1) \times \text{"sizeof"}(\text{"account"})$$
+If the objects are written statically using binary blocks, direct $\mathcal{O}(1)$ access can be derived via offset multiplication:
+$$\text{Seek Offset}(k) = (k - 1) \times \text{sizeof}(\text{account})$$
 
 ## Build & Compilation Matrix
 To compile this project natively via a MinGW/GCC toolchain:
@@ -94,7 +94,7 @@ g++ -O2 "src/Code for Bank Management System Project in C++ .cxx" -o bin/bank_sy
 ```
 
 ## Authentic Artifacts Catalog
-- **Source Code Implementation**: Available directly within ["`src/`"](src/).
+- **Source Code Implementation**: Available directly within [`src/`](src/).
 
 ## Engineering Audit & Tradeoffs
 - **Unencrypted Flat-File Storage vs. ACID RDBMS**: Writing financial structs directly to text/binary files is educational but lacks Atomicity, Consistency, Isolation, and Durability (ACID). Modern banking ledgers absolutely require relational engines (like PostgreSQL) to prevent record collisions during concurrent threading.
@@ -107,4 +107,4 @@ Mechatronics Engineer | Mechanical Design & CAD (SolidWorks & AutoCAD) | Prevent
 [GitHub](https://github.com/Hassan-Moqbel) · [Facebook](https://www.facebook.com/share/1BqxAgVjHi/) · [LinkedIn](https://www.linkedin.com/in/hassan-moqbel)
 
 ## License
-This project is licensed under the ["MIT License"](LICENSE).
+This project is licensed under the [MIT License](LICENSE).

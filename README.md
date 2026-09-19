@@ -59,10 +59,10 @@ flowchart TD
 Every account balance state $B(t)$ evolves sequentially under strict ACID constraint validation:
 
 $$
-B(t + 1) = B(t) + \Delta B, \quad 	ext{where } \Delta B = 
-egin{cases} 
-+D & 	ext{if } D > 0 	ext{ (Deposit)} \
--W & 	ext{if } W > 0 	ext{ (Withdrawal)} 
+B(t + 1) = B(t) + \Delta B, \quad \text{where } \Delta B = 
+\begin{cases} 
++D & \text{if } D > 0 \text{ (Deposit)} \\
+-W & \text{if } W > 0 \text{ (Withdrawal)} 
 \end{cases}
 $$
 
@@ -77,7 +77,7 @@ $$
 To prevent catastrophic IEEE-754 floating-point precision drift, all currency values are scaled by $10^2$ into integer minor units (cents):
 
 $$
-B_{	ext{scaled}} = 	ext{round}(B 	imes 10^2) \in \mathbb{Z}
+B_{\text{scaled}} = \text{round}(B \times 10^2) \in \mathbb{Z}
 $$
 
 ### 3. Complexity Analysis Matrix
@@ -94,7 +94,7 @@ Operating upon raw binary record streams establishes deterministic performance b
 Direct random access to record $k$ within the contiguous binary database stream is evaluated in $\mathcal{O}(1)$ time via deterministic offset addressing:
 
 $$
-	ext{Seek Offset}(k) = (k - 1) 	imes 	ext{sizeof}(	ext{Account})
+\text{Seek Offset}(k) = (k - 1) \times \text{sizeof}(\text{Account})
 $$
 
 ## Build & Compilation Matrix

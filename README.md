@@ -27,52 +27,52 @@ Developing reliable financial software requires an uncompromising commitment to 
 
 ## Software Architecture Flowchart
 
-```mermaid
+mermaid
 flowchart TD
-    MAIN(["Console Application Entry main()"]) --> MENU[Render Main Banking Menu]
+    MAIN(["Console Application Entry main()"]) --> MENU["Render Main Banking Menu"]
     
-    MENU --> O1[Option 1: New Account]
-    O1 --> O1_VAL[Input Validation & Assign ID] --> O1_SER[Serialize & Append to Disk `std::ofstream`]
+    MENU --> O1["Option 1: New Account"]
+    O1 --> O1_VAL["Input Validation & Assign ID"] --> O1_SER["Serialize & Append to Disk std::ofstream"]
     
-    MENU --> O2[Option 2: Deposit Amount]
-    O2 --> O2_LOC[Locate Account Record] --> O2_MUT[Apply Credit Mutation] --> O2_WR[Rewrite Record In-Place]
+    MENU --> O2["Option 2: Deposit Amount"]
+    O2 --> O2_LOC["Locate Account Record"] --> O2_MUT["Apply Credit Mutation"] --> O2_WR["Rewrite Record In-Place"]
     
-    MENU --> O3[Option 3: Withdraw Amount]
-    O3 --> O3_LOC[Locate Account Record] --> O3_CHK{Check Invariant: \nBalance - Amount >= MinBalance}
-    O3_CHK -->|Yes| O3_MUT[Apply Debit Mutation \n& Update File]
-    O3_CHK -->|No| O3_REJ[Reject Transaction: \nOverdraft Error]
+    MENU --> O3["Option 3: Withdraw Amount"]
+    O3 --> O3_LOC["Locate Account Record"] --> O3_CHK{"Check Invariant: \nBalance - Amount >= MinBalance"}
+    O3_CHK -->|Yes| O3_MUT["Apply Debit Mutation \n& Update File"]
+    O3_CHK -->|No| O3_REJ["Reject Transaction: \nOverdraft Error"]
     
-    MENU --> O4[Option 4: Balance Enquiry]
-    O4 --> O4_SCAN[Linear Stream Scan] --> O4_DISP[Display Account Details]
+    MENU --> O4["Option 4: Balance Enquiry"]
+    O4 --> O4_SCAN["Linear Stream Scan"] --> O4_DISP["Display Account Details"]
     
-    MENU --> O5[Option 5: Account Ledger / All Records]
-    O5 --> O5_SCAN[Iterative Sequential Scan] --> O5_TAB[Render Formatted Table]
+    MENU --> O5["Option 5: Account Ledger / All Records"]
+    O5 --> O5_SCAN["Iterative Sequential Scan"] --> O5_TAB["Render Formatted Table"]
     
-    MENU --> O6[Option 6: Close Account / Delete]
-    O6 --> O6_FILT[Filter Out Record ID] --> O6_WR[Rewrite Clean Storage Buffer]
-```
+    MENU --> O6["Option 6: Close Account / Delete"]
+    O6 --> O6_FILT["Filter Out Record ID"] --> O6_WR["Rewrite Clean Storage Buffer"]
+
 
 ## Algorithmic & Mathematical Modeling
 
 ### 1. Transactional Balance State Mutation & Invariant
 At discrete time $t$, the balance $B(t)$ evaluates mutations based on deposit credit ($D$) or withdrawal debit ($W$).
-$$B(t + 1) = B(t) + \Delta B, \quad \text{where } \Delta B = \begin{cases} +D & \text{(Deposit, } D > 0\text{)} \\ -W & \text{(Withdrawal, } W > 0\text{)} \end{cases}$$
-$$\text{System Invariant: } B(t + 1) \ge B_{min} \quad (\text{Strict Overdraft Prohibition})$$
+$$B(t + 1) = B(t) + \Delta B, \quad \text{"where "} \Delta B = \begin{"cases"} +D & \text{"(Deposit, "} D > 0\text{")"} \\ -W & \text{"(Withdrawal, "} W > 0\text{")"} \end{"cases"}$$
+$$\text{"System Invariant: "} B(t + 1) \ge B_{"min"} \quad (\text{"Strict Overdraft Prohibition"})$$
 
 ### 2. Currency Fixed-Point Scaling
 To prevent catastrophic IEEE-754 precision drift, all currency should mathematically scale by $10^2$ (representing the value strictly in cents/minor units):
-$$B_{scaled} = \text{round}(B \times 10^2) \in \mathbb{Z}$$
+$$B_{"scaled"} = \text{"round"}(B \times 10^2) \in \mathbb{"Z"}$$
 
 ### 3. Complexity Analysis Matrix
 Operating upon raw file streams dictates the algorithmic cost:
-- **Account Creation (Append)**: $\mathcal{O}(1)$ time, $\mathcal{O}(1)$ auxiliary space.
-- **Linear Account Search by ID**: $\mathcal{O}(N)$ time.
-- **In-Place File Record Update**: $\mathcal{O}(N)$ time (if searching sequentially), bounded $\mathcal{O}(1)$ auxiliary memory.
-- **Complete Ledger Scan & Display**: $\mathcal{O}(N)$ time.
+- **Account Creation (Append)**: $\mathcal{"O"}(1)$ time, $\mathcal{"O"}(1)$ auxiliary space.
+- **Linear Account Search by ID**: $\mathcal{"O"}(N)$ time.
+- **In-Place File Record Update**: $\mathcal{"O"}(N)$ time (if searching sequentially), bounded $\mathcal{"O"}(1)$ auxiliary memory.
+- **Complete Ledger Scan & Display**: $\mathcal{"O"}(N)$ time.
 
 ### 4. Binary Record File Offset Addressing
-If the objects are written statically using binary blocks, direct $\mathcal{O}(1)$ access can be derived via offset multiplication:
-$$\text{Seek Offset}(k) = (k - 1) \times \text{sizeof}(\text{account})$$
+If the objects are written statically using binary blocks, direct $\mathcal{"O"}(1)$ access can be derived via offset multiplication:
+$$\text{"Seek Offset"}(k) = (k - 1) \times \text{"sizeof"}(\text{"account"})$$
 
 ## Build & Compilation Matrix
 To compile this project natively via a MinGW/GCC toolchain:
@@ -94,7 +94,7 @@ g++ -O2 "src/Code for Bank Management System Project in C++ .cxx" -o bin/bank_sy
 ```
 
 ## Authentic Artifacts Catalog
-- **Source Code Implementation**: Available directly within [`src/`](src/).
+- **Source Code Implementation**: Available directly within ["`src/`"](src/).
 
 ## Engineering Audit & Tradeoffs
 - **Unencrypted Flat-File Storage vs. ACID RDBMS**: Writing financial structs directly to text/binary files is educational but lacks Atomicity, Consistency, Isolation, and Durability (ACID). Modern banking ledgers absolutely require relational engines (like PostgreSQL) to prevent record collisions during concurrent threading.
@@ -107,4 +107,4 @@ Mechatronics Engineer | Mechanical Design & CAD (SolidWorks & AutoCAD) | Prevent
 [GitHub](https://github.com/Hassan-Moqbel) · [Facebook](https://www.facebook.com/share/1BqxAgVjHi/) · [LinkedIn](https://www.linkedin.com/in/hassan-moqbel)
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the ["MIT License"](LICENSE).

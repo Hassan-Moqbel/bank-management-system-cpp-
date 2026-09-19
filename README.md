@@ -52,27 +52,50 @@ flowchart TD
     O6 --> O6_FILT["Filter Out Record ID"] --> O6_WR["Rewrite Clean Storage Buffer"]
 ```
 
-## Algorithmic & Mathematical Modeling
+## Algorithmic & Transaction Mathematical Models
 
-### 1. Transactional Balance State Mutation & Invariant
-At discrete time $t$, the balance$B(t)$evaluates mutations based on deposit credit ($D$) or withdrawal debit ($W$).
-$$B(t + 1) = B(t) + \Delta B, \quad \text{where } \Delta B = \begin{cases} +D & \text{(Deposit, } D > 0\text{)} \\ -W & \text{(Withdrawal, } W > 0\text{)} \end{cases}$$
-$$\text{System Invariant: } B(t + 1) \ge B_{min} \quad (\text{Strict Overdraft Prohibition})$$
+### 1. Balance State Transition & Invariant
+
+Every account balance state $B(t)$ evolves sequentially under strict ACID constraint validation:
+
+$$
+B(t + 1) = B(t) + \Delta B, \quad 	ext{where } \Delta B = 
+egin{cases} 
++D & 	ext{if } D > 0 	ext{ (Deposit)} \
+-W & 	ext{if } W > 0 	ext{ (Withdrawal)} 
+\end{cases}
+$$
+
+**System Invariant (Strict Overdraft Prohibition):**
+
+$$
+B(t + 1) \ge B_{\min}
+$$
 
 ### 2. Currency Fixed-Point Scaling
-To prevent catastrophic IEEE-754 precision drift, all currency should mathematically scale by $10^2$ (representing the value strictly in cents/minor units):
-$$B_{scaled} = \text{round}(B \times 10^2) \in \mathbb{Z}$$
+
+To prevent catastrophic IEEE-754 floating-point precision drift, all currency values are scaled by $10^2$ into integer minor units (cents):
+
+$$
+B_{	ext{scaled}} = 	ext{round}(B 	imes 10^2) \in \mathbb{Z}
+$$
 
 ### 3. Complexity Analysis Matrix
-Operating upon raw file streams dictates the algorithmic cost:
-- **Account Creation (Append)**: $\mathcal{O}(1)$time,$\mathcal{O}(1)$ auxiliary space.
-- **Linear Account Search by ID**: $\mathcal{O}(N)$ time.
-- **In-Place File Record Update**: $\mathcal{O}(N)$time (if searching sequentially), bounded$\mathcal{O}(1)$ auxiliary memory.
-- **Complete Ledger Scan & Display**: $\mathcal{O}(N)$ time.
+
+Operating upon raw binary record streams establishes deterministic performance bounds:
+
+* **Account Creation (Append):** $\mathcal{O}(1)$ time, $\mathcal{O}(1)$ auxiliary space
+* **Linear Account Search by ID:** $\mathcal{O}(N)$ time
+* **In-Place Record Update:** $\mathcal{O}(N)$ time (sequential scan), bounded $\mathcal{O}(1)$ auxiliary memory
+* **Complete Ledger Scan & Display:** $\mathcal{O}(N)$ time
 
 ### 4. Binary Record File Offset Addressing
-If the objects are written statically using binary blocks, direct $\mathcal{O}(1)$ access can be derived via offset multiplication:
-$$\text{Seek Offset}(k) = (k - 1) \times \text{sizeof}(\text{account})$$
+
+Direct random access to record $k$ within the contiguous binary database stream is evaluated in $\mathcal{O}(1)$ time via deterministic offset addressing:
+
+$$
+	ext{Seek Offset}(k) = (k - 1) 	imes 	ext{sizeof}(	ext{Account})
+$$
 
 ## Build & Compilation Matrix
 To compile this project natively via a MinGW/GCC toolchain:

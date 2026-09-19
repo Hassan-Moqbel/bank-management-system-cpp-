@@ -1,4 +1,4 @@
-# P22: Bank Management System (C++)
+﻿# Bank Management System (C++)
 
 ![C++](https://img.shields.io/badge/Language-C%2B%2B-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
 ![OOP](https://img.shields.io/badge/Paradigm-Object--Oriented_Programming-A8B9CC?style=for-the-badge)
@@ -29,7 +29,7 @@ Developing reliable financial software requires an uncompromising commitment to 
 
 ```mermaid
 flowchart TD
-    MAIN([Console Application Entry `main()`]) --> MENU[Render Main Banking Menu]
+    MAIN(["Console Application Entry main()"]) --> MENU[Render Main Banking Menu]
     
     MENU --> O1[Option 1: New Account]
     O1 --> O1_VAL[Input Validation & Assign ID] --> O1_SER[Serialize & Append to Disk `std::ofstream`]
